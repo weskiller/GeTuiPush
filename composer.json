@@ -1,0 +1,25 @@
+{
+    "name": "weskiller/GeTuiPush",
+    "description": "getui push client libary",
+    "keywords": ["getui", "getui-client"],
+    "homepage": "https://www.getui.com/cn",
+    "license": "MIT",
+    "authors": [
+        {
+        "name": "weskiller",
+        "homepage": "weskiller@vip.qq.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Weskiller\\GeTuiPush": "src/"
+        }
+    },
+    "require": {
+        "php": ">=7.2",
+        "ext-json": "*",
+        "ext-curl": "*",
+        "ext-zlib": "*",
+        "ext-mbstring": "*"
+    }
+}
