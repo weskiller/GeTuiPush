@@ -6,13 +6,12 @@
     "license": "MIT",
     "authors": [
         {
-        "name": "weskiller",
-        "homepage": "weskiller@vip.qq.com"
+        "name": "weskiller <weskiller@vip.qq.com>"
         }
     ],
     "autoload": {
         "psr-4": {
-            "Weskiller\\GeTuiPush": "src/"
+            "Weskiller\\GeTuiPush\\": "src/"
         }
     },
     "require": {
