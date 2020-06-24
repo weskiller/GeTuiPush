@@ -2,17 +2,8 @@
 
 namespace Weskiller\GeTuiPush\Utils;
 
-/**
- * Created by PhpStorm.
- * User: Administrator
- * Date: 15-5-7
- * Time: 下午2:15
- */
 class GTConfig
 {
-
-
-
     public static function isPushSingleBatchAsync()
     {
         return "true" === GTConfig::getProperty("gexin_pushSingleBatch_needAsync", null, "false");

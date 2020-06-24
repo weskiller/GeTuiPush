@@ -5,12 +5,6 @@ namespace Weskiller\GeTuiPush\Utils;
 use Throwable;
 use Weskiller\GeTuiPush\Exception\RequestException;
 
-/**
- * Created by PhpStorm.
- * User: Administrator
- * Date: 15-5-9
- * Time: 下午3:12
- */
 class HttpManager
 {
     static $curls = array();

@@ -2,12 +2,6 @@
 
 namespace Weskiller\GeTuiPush\Utils;
 
-/**
- * Created by PhpStorm.
- * User: Administrator
- * Date: 15-5-9
- * Time: 下午3:17
- */
 class LogUtils
 {
     static $debug = true;

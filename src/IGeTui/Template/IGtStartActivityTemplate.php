@@ -9,12 +9,6 @@ use Weskiller\GeTuiPush\IGeTui\InnerFiled;
 use Weskiller\GeTuiPush\IGeTui\InnerFiledType;
 use Weskiller\GeTuiPush\Utils\GTConfig;
 
-/**
- * Created by PhpStorm.
- * User: zqzhao5
- * Date: 17-9-26
- * Time: 下午5:55
- */
 class IGtStartActivityTemplate extends IGtBaseTemplate
 {
     var $intent;
