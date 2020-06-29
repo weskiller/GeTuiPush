@@ -48,4 +48,3 @@ class PBBytes extends PBScalar
 		return $string;
 	}
 }
-?>

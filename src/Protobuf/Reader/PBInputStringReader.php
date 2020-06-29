@@ -55,4 +55,3 @@ class PBInputStringReader extends PBInputReader
 		return false;
 	}
 }
-?>

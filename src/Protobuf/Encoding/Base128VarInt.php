@@ -112,5 +112,3 @@ class Base128VarInt
     }
 
 }
-
-?>

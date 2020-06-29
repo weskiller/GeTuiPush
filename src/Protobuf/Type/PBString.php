@@ -48,4 +48,3 @@ class PBString extends PBScalar
 		return $string;
 	}
 }
-?>

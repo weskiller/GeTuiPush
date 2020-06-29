@@ -9,18 +9,17 @@ use Weskiller\GeTuiPush\Protobuf\PBMessage;
  */
 class PBBool extends PBInt
 {
-	protected $wired_type = PBMessage::WIRED_VARINT;
+	protected int $wired_type = PBMessage::WIRED_VARINT;
 
 	/**
 	 * Parses the message for this type
 	 *
 	 * @param array
 	 */
-	public function ParseFromArray()
+	public function ParseFromArray() :void
 	{
 		$this->value = $this->reader->next();
 		$this->value = ($this->value !== 0) ? 1 : 0;
 	}
 
 }
-?>

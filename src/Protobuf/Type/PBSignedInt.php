@@ -10,20 +10,20 @@ use Weskiller\GeTuiPush\Protobuf\PBMessage;
  */
 class PBSignedInt extends PBScalar
 {
-	protected $wired_type = PBMessage::WIRED_VARINT;
+	protected int $wired_type = PBMessage::WIRED_VARINT;
 
 	/**
 	 * Parses the message for this type
 	 *
 	 * @param array
 	 */
-	public function ParseFromArray()
+	public function ParseFromArray() :void
 	{
 		parent::ParseFromArray();
 
 		$saved = $this->value;
 		$this->value = round($this->value / 2);
-		if ($saved % 2 == 1)
+		if ($saved % 2 === 1)
 		{
 			$this->value = -($this->value);
 		}
@@ -31,8 +31,10 @@ class PBSignedInt extends PBScalar
 
 	/**
 	 * Serializes type
+	 * @param int $rec
+	 * @return string
 	 */
-	public function SerializeToString($rec=-1)
+	public function SerializeToString($rec = -1) :string
 	{
 		// now convert signed int to int
 		$save = $this->value;
@@ -42,7 +44,7 @@ class PBSignedInt extends PBScalar
 		}
 		else 
 		{
-			$this->value = $this->value*2;
+			$this->value *= 2;
 		}
 		$string = parent::SerializeToString($rec);
 		// restore value
@@ -51,4 +53,3 @@ class PBSignedInt extends PBScalar
 		return $string;
 	}
 }
-?>

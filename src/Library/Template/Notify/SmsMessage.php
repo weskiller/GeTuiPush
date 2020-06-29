@@ -116,5 +116,3 @@ class SmsMessage {
     }//自定义字段
 
 }
-
-?>

@@ -139,4 +139,3 @@ class IGtAPNPayload
         return $this;
     }
 }
-?>
