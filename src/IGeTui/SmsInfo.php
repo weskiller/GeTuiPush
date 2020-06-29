@@ -6,6 +6,8 @@ namespace Weskiller\GeTuiPush\IGeTui;
 
 use Weskiller\GeTuiPush\Protobuf\PBMessage;
 use Weskiller\GeTuiPush\Protobuf\Type\PBBool;
+use Weskiller\GeTuiPush\Protobuf\Type\PBInt;
+use Weskiller\GeTuiPush\Protobuf\Type\PBString;
 
 class SmsInfo extends PBMessage
 {
@@ -13,20 +15,20 @@ class SmsInfo extends PBMessage
     public function __construct($reader=null)
     {
         parent::__construct($reader);
-        $this->fields["1"] = "PBString";
+        $this->fields["1"] = PBString::class;
         $this->values["1"] = "";
-        $this->fields["2"] = "SmsContentEntry";
+        $this->fields["2"] = SmsContentEntry::class;
         $this->values["2"] = array();
-        $this->fields["3"] = "PBInt";
+        $this->fields["3"] = PBInt::class;
         $this->values["3"] = "";
-        $this->fields["4"] = "PBInt";
+        $this->fields["4"] = PBInt::class;
         $this->values["4"] = "";
-        $this->fields["5"] = "PBBool";
+        $this->fields["5"] = PBBool::class;
         $this->values["5"] = "";
         $pool = new PBBool();
         $pool->value = false;
         $this->values[5] = $pool;
-        $this->fields["6"] = "PBString";
+        $this->fields["6"] = PBString::class;
         $this->values["6"] = "";
     }
     function smsTemplateId()

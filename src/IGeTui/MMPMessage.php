@@ -6,6 +6,8 @@ namespace Weskiller\GeTuiPush\IGeTui;
 
 use Weskiller\GeTuiPush\Protobuf\PBMessage;
 use Weskiller\GeTuiPush\Protobuf\Type\PBBool;
+use Weskiller\GeTuiPush\Protobuf\Type\PBInt;
+use Weskiller\GeTuiPush\Protobuf\Type\PBString;
 
 class MMPMessage extends PBMessage
 {
@@ -13,26 +15,26 @@ class MMPMessage extends PBMessage
     public function __construct($reader=null)
     {
         parent::__construct($reader);
-        $this->fields["2"] = "Transparent";
+        $this->fields["2"] = Transparent::class;
         $this->values["2"] = "";
-        $this->fields["3"] = "PBString";
+        $this->fields["3"] = PBString::class;
         $this->values["3"] = "";
-        $this->fields["4"] = "PBInt";
+        $this->fields["4"] = PBInt::class;
         $this->values["4"] = "";
-        $this->fields["5"] = "PBInt";
+        $this->fields["5"] = PBInt::class;
         $this->values["5"] = "";
-        $this->fields["6"] = "PBInt";
+        $this->fields["6"] = PBInt::class;
         $this->values["6"] = "";
-        $this->fields["7"] = "PBBool";
+        $this->fields["7"] = PBBool::class;
         $this->values["7"] = "";
         $pool7 = new PBBool();
         $pool7->value = true;
         $this->values["7"] = $pool7;
-        $this->fields["8"] = "PBInt";
+        $this->fields["8"] = PBInt::class;
         $this->values["8"] = "";
-        $this->fields["9"] = "PBString";
+        $this->fields["9"] = PBString::class;
         $this->values["9"] = "";
-        $this->fields["10"] = "PBBool";
+        $this->fields["10"] = PBBool::class;
         $this->values["10"] = "";
         $pool10 = new PBBool();
         $pool10->value = true;

@@ -5,6 +5,7 @@ namespace Weskiller\GeTuiPush\IGeTui;
 
 
 use Weskiller\GeTuiPush\Protobuf\PBMessage;
+use Weskiller\GeTuiPush\Protobuf\Type\PBString;
 
 class SmsContentEntry extends PBMessage
 {
@@ -12,9 +13,9 @@ class SmsContentEntry extends PBMessage
     public function __construct($reader=null)
     {
         parent::__construct($reader);
-        $this->fields["1"] = "PBString";
+        $this->fields["1"] = PBString::class;
         $this->values["1"] = "";
-        $this->fields["2"] = "PBString";
+        $this->fields["2"] = PBString::class;
         $this->values["2"] = "";
     }
     function key()

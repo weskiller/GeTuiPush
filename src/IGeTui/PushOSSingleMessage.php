@@ -5,6 +5,7 @@ namespace Weskiller\GeTuiPush\IGeTui;
 
 
 use Weskiller\GeTuiPush\Protobuf\PBMessage;
+use Weskiller\GeTuiPush\Protobuf\Type\PBString;
 
 class PushOSSingleMessage extends PBMessage
 {
@@ -12,11 +13,11 @@ class PushOSSingleMessage extends PBMessage
     public function __construct($reader=null)
     {
         parent::__construct($reader);
-        $this->fields["1"] = "PBString";
+        $this->fields["1"] = PBString::class;
         $this->values["1"] = "";
-        $this->fields["2"] = "OSMessage";
+        $this->fields["2"] = OnMessage::class;
         $this->values["2"] = "";
-        $this->fields["3"] = "Target";
+        $this->fields["3"] = Target::class;
         $this->values["3"] = "";
     }
     function seqId()

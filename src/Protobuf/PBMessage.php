@@ -259,7 +259,8 @@ abstract class PBMessage
         }
         else
         {
-            $this->values[$index] = new $this->fields[$index]();
+            $class = 'Type\\' . $this->fields[$index];
+            $this->values[$index] = new $class;
             $this->values[$index]->value = $value;
         }
     }

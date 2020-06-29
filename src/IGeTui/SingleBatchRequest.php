@@ -5,6 +5,7 @@ namespace Weskiller\GeTuiPush\IGeTui;
 
 
 use Weskiller\GeTuiPush\Protobuf\PBMessage;
+use Weskiller\GeTuiPush\Protobuf\Type\PBString;
 
 class SingleBatchRequest extends PBMessage
 {
@@ -12,9 +13,9 @@ class SingleBatchRequest extends PBMessage
     public function __construct($reader=null)
     {
         parent::__construct($reader);
-        $this->fields["1"] = "PBString";
+        $this->fields["1"] = PBString::class;
         $this->values["1"] = "";
-        $this->fields["2"] = "SingleBatchItem";
+        $this->fields["2"] = SingleBatchItem::class;
         $this->values["2"] = array();
     }
     function batchId()

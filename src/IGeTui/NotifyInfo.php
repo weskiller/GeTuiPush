@@ -5,6 +5,7 @@ namespace Weskiller\GeTuiPush\IGeTui;
 
 
 use Weskiller\GeTuiPush\Protobuf\PBMessage;
+use Weskiller\GeTuiPush\Protobuf\Type\PBString;
 
 class NotifyInfo extends PBMessage
 {
@@ -13,22 +14,22 @@ class NotifyInfo extends PBMessage
     public function __construct($reader=null)
     {
         parent::__construct($reader);
-        $this->fields["1"] = "PBString";
+        $this->fields["1"] = PBString::class;
         $this->values["1"] = "";
-        $this->fields["2"] = "PBString";
+        $this->fields["2"] = PBString::class;
         $this->values["2"] = "";
-        $this->fields["3"] = "PBString";
+        $this->fields["3"] = PBString::class;
         $this->values["3"] = "";
-        $this->fields["4"] = "PBString";
+        $this->fields["4"] = PBString::class;
         $this->values["4"] = "";
-        $this->fields["5"] = "PBString";
+        $this->fields["5"] = PBString::class;
         $this->values["5"] = "";
-        $this->fields["6"] = "NotifyInfo_Type";
+        $this->fields["6"] = NotifyInfoType::class;
         $this->values["6"] = "";
         $notify = new NotifyInfoType();
         $notify->value = NotifyInfoType::_payload;
         $this->values["6"] = $notify;
-        $this->fields["7"] = "PBString";
+        $this->fields["7"] = PBString::class;
         $this->values["7"] = "";
     }
     function title()

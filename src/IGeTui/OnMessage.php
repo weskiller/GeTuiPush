@@ -5,6 +5,9 @@ namespace Weskiller\GeTuiPush\IGeTui;
 
 
 use Weskiller\GeTuiPush\Protobuf\PBMessage;
+use Weskiller\GeTuiPush\Protobuf\Type\PBBool;
+use Weskiller\GeTuiPush\Protobuf\Type\PBInt;
+use Weskiller\GeTuiPush\Protobuf\Type\PBString;
 
 class OnMessage extends PBMessage
 {
@@ -12,19 +15,19 @@ class OnMessage extends PBMessage
     public function __construct($reader=null)
     {
         parent::__construct($reader);
-        $this->fields["2"] = "PBBool";
+        $this->fields["2"] = PBBool::class;
         $this->values["2"] = "";
-        $this->fields["3"] = "PBInt";
+        $this->fields["3"] = PBInt::class;
         $this->values["3"] = "";
-        $this->fields["4"] = "Transparent";
+        $this->fields["4"] = Transparent::class;
         $this->values["4"] = "";
-        $this->fields["5"] = "PBString";
+        $this->fields["5"] = PBString::class;
         $this->values["5"] = "";
-        $this->fields["6"] = "PBInt";
+        $this->fields["6"] = PBInt::class;
         $this->values["6"] = "";
-        $this->fields["7"] = "PBInt";
+        $this->fields["7"] = PBInt::class;
         $this->values["7"] = "";
-        $this->fields["8"] = "PBInt";
+        $this->fields["8"] = PBInt::class;
         $this->values["8"] = "";
     }
     function isOffline()

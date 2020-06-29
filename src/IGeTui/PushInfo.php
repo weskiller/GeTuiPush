@@ -5,6 +5,9 @@ namespace Weskiller\GeTuiPush\IGeTui;
 
 
 use Weskiller\GeTuiPush\Protobuf\PBMessage;
+use Weskiller\GeTuiPush\Protobuf\Type\PBBool;
+use Weskiller\GeTuiPush\Protobuf\Type\PBInt;
+use Weskiller\GeTuiPush\Protobuf\Type\PBString;
 
 class PushInfo extends PBMessage
 {
@@ -12,35 +15,35 @@ class PushInfo extends PBMessage
     public function __construct($reader=null)
     {
         parent::__construct($reader);
-        $this->fields["1"] = "PBString";
+        $this->fields["1"] = PBString::class;
         $this->values["1"] = "";
-        $this->fields["2"] = "PBString";
+        $this->fields["2"] = PBString::class;
         $this->values["2"] = "";
-        $this->fields["3"] = "PBString";
+        $this->fields["3"] = PBString::class;
         $this->values["3"] = "";
-        $this->fields["4"] = "PBString";
+        $this->fields["4"] = PBString::class;
         $this->values["4"] = "";
-        $this->fields["5"] = "PBString";
+        $this->fields["5"] = PBString::class;
         $this->values["5"] = "";
-        $this->fields["6"] = "PBString";
+        $this->fields["6"] = PBString::class;
         $this->values["6"] = "";
-        $this->fields["7"] = "PBString";
+        $this->fields["7"] = PBString::class;
         $this->values["7"] = "";
-        $this->fields["8"] = "PBString";
+        $this->fields["8"] = PBString::class;
         $this->values["8"] = "";
-        $this->fields["9"] = "PBString";
+        $this->fields["9"] = PBString::class;
         $this->values["9"] = "";
-        $this->fields["10"] = "PBInt";
+        $this->fields["10"] = PBInt::class;
         $this->values["10"] = "";
-        $this->fields["11"] = "PBBool";
+        $this->fields["11"] = PBBool::class;
         $this->values["11"] = "";
-        $this->fields["12"] = "PBString";
+        $this->fields["12"] = PBString::class;
         $this->values["12"] = "";
-        $this->fields["13"] = "PBBool";
+        $this->fields["13"] = PBBool::class;
         $this->values["13"] = "";
-        $this->fields["14"] = "PBString";
+        $this->fields["14"] = PBString::class;
         $this->values["14"] = "";
-        $this->fields["15"] = "PBBool";
+        $this->fields["15"] = PBBool::class;
         $this->values["15"] = "";
         $this->fields["16"] = "NotifyInfo";
         $this->values["16"] = "";
