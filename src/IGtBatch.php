@@ -3,18 +3,18 @@
 namespace Weskiller\GeTuiPush;
 
 use RuntimeException;
-use Weskiller\GeTuiPush\IGeTui\SingleBatchItem;
-use Weskiller\GeTuiPush\IGeTui\SingleBatchRequest;
+use Weskiller\GeTuiPush\Library\SingleBatchItem;
+use Weskiller\GeTuiPush\Library\SingleBatchRequest;
 use Weskiller\GeTuiPush\Utils\GTConfig;
 
 class IGtBatch
 {
-    var $batchId;
-    var $innerMsgList = array();
-    var $seqId = 0;
-    var $APPKEY;
-    var $push;
-    var $lastPostData;
+    protected $batchId;
+    protected $innerMsgList = array();
+    protected $seqId = 0;
+    protected $APPKEY;
+    protected $push;
+    protected $lastPostData;
 
     public function __construct($appkey, $push)
     {

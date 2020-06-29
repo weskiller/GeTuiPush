@@ -3,10 +3,10 @@ namespace Weskiller\GeTuiPush;
 
 use RuntimeException;
 use Throwable;
-use Weskiller\GeTuiPush\IGeTui\IGtListMessage;
-use Weskiller\GeTuiPush\IGeTui\IGtMessage;
-use Weskiller\GeTuiPush\IGeTui\IGtTagMessage;
-use Weskiller\GeTuiPush\IGeTui\IGtTarget;
+use Weskiller\GeTuiPush\Library\IGtListMessage;
+use Weskiller\GeTuiPush\Library\IGtMessage;
+use Weskiller\GeTuiPush\Library\IGtTagMessage;
+use Weskiller\GeTuiPush\Library\IGtTarget;
 use Weskiller\GeTuiPush\Utils\ApiUrlRespectUtils;
 use Weskiller\GeTuiPush\Utils\GTConfig;
 use Weskiller\GeTuiPush\Utils\HttpManager;
@@ -14,15 +14,15 @@ use Weskiller\GeTuiPush\Utils\LangUtils;
 
 Class IGeTui
 {
-    var $appkey; //第三方 标识
-    var $masterSecret; //第三方 密钥
-    var $format = "json"; //默认为 json 格式
-    var $host = '';
-    var $needDetails = false;
+    protected $appkey; //第三方 标识
+    protected $masterSecret; //第三方 密钥
+    protected $format = "json"; //默认为 json 格式
+    protected $host = '';
+    protected $needDetails = false;
     static $appkeyUrlList = array();
-    var $domainUrlList =  array();
-    var $useSSL = NULL; //是否使用https连接 以该标志为准
-    var $authToken;
+    protected $domainUrlList =  array();
+    protected $useSSL = NULL; //是否使用https连接 以该标志为准
+    protected $authToken;
 
     public function __construct($domainUrl, $appkey, $masterSecret, $ssl = NULL)
     {

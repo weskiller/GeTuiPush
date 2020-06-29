@@ -9,14 +9,14 @@ use Weskiller\GeTuiPush\Protobuf\PBMessage;
  */
 class PBString extends PBScalar
 {
-	protected $wired_type = PBMessage::WIRED_LENGTH_DELIMITED;
+	protected int $wired_type = PBMessage::WIRED_LENGTH_DELIMITED;
 
 	/**
 	 * Parses the message for this type
 	 *
 	 * @param array
 	 */
-	public function ParseFromArray()
+	public function ParseFromArray() :void
 	{
 		$this->value = '';
 		// first byte is length
@@ -30,8 +30,10 @@ class PBString extends PBScalar
 
 	/**
 	 * Serializes type
+	 * @param int $rec
+	 * @return string
 	 */
-	public function SerializeToString($rec = -1)
+	public function SerializeToString($rec = -1) :string
 	{
 		$string = '';
 

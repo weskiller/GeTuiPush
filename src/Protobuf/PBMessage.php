@@ -12,44 +12,47 @@ use Weskiller\GeTuiPush\Protobuf\Type\PBString;
  */
 abstract class PBMessage
 {
-    const WIRED_VARINT = 0;
-    const WIRED_64BIT = 1;
-    const WIRED_LENGTH_DELIMITED = 2;
-    const WIRED_START_GROUP = 3;
-    const WIRED_END_GROUP = 4;
-    const WIRED_32BIT = 5;
+    public const WIRED_VARINT = 0;
+    public const WIRED_LENGTH_DELIMITED = 2;
+    public const WIRED_START_GROUP = 3;
+    public const WIRED_END_GROUP = 4;
+    public const WIRED_32BIT = 5;
 
-    protected $base128;
+    protected Base128VarInt $base128;
 
     // here are the field types
-    protected $fields = array();
+    protected array $fields = array();
     // the values for the fields
-    protected $values = array();
+    protected array $values = array();
 
     // type of the class
-    protected $wired_type = 2;
+    protected int $wired_type = 2;
 
-    // the value of a class
+    /**
+     * the value of a class
+     * @var mixed
+     */
     protected $value = null;
 
     // modus byte or string parse (byte for productive string for better reading and debuging)
     // 1 = byte, 2 = String
-    const MODUS = 1;
+    public const MODUS = 1;
 
     // now use pointer for speed improvement
     // pointer to begin
     protected $reader;
 
     // chunk which the class not understands
-    protected $chunk = '';
+    protected string $chunk = '';
 
     // variable for Send method
-    protected $_d_string = '';
+    protected string $_d_string = '';
 
     /**
      * Constructor - initialize base128 class
+     * @param null $reader
      */
-    public function __construct($reader=null)
+    public function __construct($reader = null)
     {
         $this->reader = $reader;
         $this->value = $this;
@@ -75,9 +78,10 @@ abstract class PBMessage
 
     /**
      * Encodes a Message
+     * @param int $rec
      * @return string the encoded message
      */
-    public function SerializeToString($rec=-1)
+    public function SerializeToString($rec = -1) :string
     {
         $string = '';
         // wired and type
@@ -123,11 +127,12 @@ abstract class PBMessage
 
     /**
      * Serializes the chunk
-     * @param String $stringinner - String where to append the chunk
+     * @param String $stringInner - String where to append the chunk
+     * @return void
      */
-    public function _serialize_chunk(&$stringinner)
+    public function _serialize_chunk(&$stringInner) :void
     {
-        $stringinner .= $this->chunk;
+        $stringInner .= $this->chunk;
     }
 
     /**
@@ -135,7 +140,7 @@ abstract class PBMessage
      *
      * @param string message as stream of hex example '1a 03 08 96 01'
      */
-    public function ParseFromString($message)
+    public function ParseFromString($message) :void
     {
         $this->reader = new PBInputStringReader($message);
         $this->_ParseFromArray();
@@ -144,7 +149,7 @@ abstract class PBMessage
     /**
      * Internal function
      */
-    public function ParseFromArray()
+    public function ParseFromArray() :void
     {
         $this->chunk = '';
         // read the length byte
@@ -155,8 +160,9 @@ abstract class PBMessage
 
     /**
      * Internal function
+     * @param int $length
      */
-    private function _ParseFromArray($length=99999999)
+    private function _ParseFromArray($length = 99999999) :void
     {
         $_begin = $this->reader->get_pointer();
         while ($this->reader->get_pointer() - $_begin < $length)
@@ -220,6 +226,7 @@ abstract class PBMessage
     /**
      * Add an array value
      * @param int - index of the field
+     * @return mixed
      */
     protected function _add_arr_value($index)
     {
@@ -259,8 +266,7 @@ abstract class PBMessage
         }
         else
         {
-            $class = 'Type\\' . $this->fields[$index];
-            $this->values[$index] = new $class;
+            $this->values[$index] = new $this->fields[$index];
             $this->values[$index]->value = $value;
         }
     }
