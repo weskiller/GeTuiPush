@@ -20,6 +20,6 @@
         "ext-curl": "*",
         "ext-zlib": "*",
         "ext-mbstring": "*",
-        "guzzlehttp/guzzle": "^7.0"
+        "guzzlehttp/guzzle": "^6"
     }
 }

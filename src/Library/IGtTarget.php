@@ -14,7 +14,7 @@ class IGtTarget
     {
         return $this->appId;
     }
-    public function setAppId($appId)
+    public function set_appId($appId)
     {
         return $this->appId = $appId;
     }
@@ -22,7 +22,7 @@ class IGtTarget
     {
         return $this->clientId;
     }
-    public function setClientId($clientId)
+    public function set_clientId($clientId)
     {
         return $this->clientId = $clientId;
     }
