@@ -4,39 +4,33 @@ namespace Weskiller\GeTuiPush\Library;
 
 class IGtTarget
 {
-	protected  $appId;
- 
-	protected $clientId;
+    protected string $appId;
 
-    protected $alias;
- 
+	protected ?string $clientId = null;
 
-	 public function __construct()
-	 {
+    protected ?string $alias = null;
 
-	 }
-
-	function get_appId()
-	{
-		return $this->appId;
-	}
-	function set_appId($appId)
-	{
-		return $this->appId = $appId;
-	}
-	function get_clientId()
-	{
-		return $this->clientId;
-	}
-	function set_clientId($clientId)
-	{
-		return $this->clientId = $clientId;
-	}
-    function set_alias($alias)
+    public function get_appId()
+    {
+        return $this->appId;
+    }
+    public function setAppId($appId)
+    {
+        return $this->appId = $appId;
+    }
+    public function get_clientId()
+    {
+        return $this->clientId;
+    }
+    public function setClientId($clientId)
+    {
+        return $this->clientId = $clientId;
+    }
+    public function set_alias($alias)
     {
         return $this->alias = $alias;
     }
-    function get_alias()
+    public function get_alias()
     {
         return $this->alias;
     }

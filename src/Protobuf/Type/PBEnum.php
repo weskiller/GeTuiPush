@@ -9,22 +9,24 @@ use Weskiller\GeTuiPush\Protobuf\PBMessage;
  */
 class PBEnum extends PBScalar
 {
-	protected $wired_type = PBMessage::WIRED_VARINT;
+    protected int $wired_type = PBMessage::WIRED_VARINT;
 
 	/**
 	 * Parses the message for this type
 	 *
 	 * @param array
 	 */
-	public function ParseFromArray()
+	public function ParseFromArray() :void
 	{
 		$this->value = $this->reader->next();
 	}
 
-	/**
-	 * Serializes type
-	 */
-	public function SerializeToString($rec=-1)
+    /**
+     * Serializes type
+     * @param int $rec
+     * @return string
+     */
+	public function SerializeToString($rec=-1) :string
 	{
 		$string = '';
 

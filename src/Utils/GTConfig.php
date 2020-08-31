@@ -122,7 +122,7 @@ class GTConfig
 
     private static function getProperty($key, $oldKey, $defaultValue = null)
     {
-        return getenv($key) ?? getenv($oldKey) ?? $defaultValue;
+        return getenv($key) ?: (getenv($oldKey) ?: $defaultValue);
     }
 
     public static function getNotifyIntentLimit()

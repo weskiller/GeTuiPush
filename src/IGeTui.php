@@ -35,10 +35,10 @@ Class IGeTui
             $ssl = true;
         }
 
-        $this->useSSL = ($ssl === NULL ? false : $ssl);
+        $this->useSSL = ($ssl ?? false);
 
 
-        if ($domainUrl === NULL || strlen($domainUrl) === 0)
+        if ($domainUrl === NULL || $domainUrl === '')
         {
             $this->domainUrlList =  GTConfig::getDefaultDomainUrl($this->useSSL);
         }
@@ -279,6 +279,7 @@ Class IGeTui
         $params["async"] = $async;
         if($async && (!$needDetails))
         {
+            var_dump(__LINE__);
             $limit = GTConfig::getAsyncListLimit();
         }
         else
@@ -287,6 +288,8 @@ Class IGeTui
         }
         if(count($targetList) > $limit)
         {
+            var_dump($targetList,$limit);
+
             throw new RuntimeException("target size:".count($targetList)." beyond the limit:".$limit);
         }
         $clientIdList = array();

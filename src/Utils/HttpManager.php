@@ -2,131 +2,166 @@
 
 namespace Weskiller\GeTuiPush\Utils;
 
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\ConnectException;
+use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Middleware;
+use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\Psr7\Response;
+use JsonException;
 use Throwable;
-use Weskiller\GeTuiPush\Exception\RequestException;
+use function GuzzleHttp\Psr7\str;
 
 class HttpManager
 {
-    static $curls = array();
+    private static ?Client $client = null;
 
+    public static function retryDecider(): callable
+    {
+        return static function (
+            $retries,
+            Request $request,
+            Response $response = null,
+            RequestException $exception = null
+        ) {
+            // 超过最大重试次数，不再重试
+            if ($retries >= 3) {
+                return false;
+            }
+
+            // 请求失败，继续重试
+            if ($exception instanceof ConnectException) {
+                return true;
+            }
+
+            // 如果请求有响应，但是状态码大于等于500，继续重试(这里根据自己的业务而定)
+            if ($response && $response->getStatusCode() >= 500) {
+                return true;
+            }
+
+            return false;
+        };
+    }
+
+    /**
+     * @return Client
+     */
+    public static function getClient(): Client
+    {
+        if(self::$client === null) {
+            $handler = HandlerStack::create();
+            $handler->push(Middleware::retry(self::retryDecider()));
+            self::$client = new Client(['config' => compact('handler')]);
+        }
+        return self::$client;
+    }
+
+    /**
+     * @param Client $client
+     */
+    public static function setClient(Client $client): void
+    {
+        self::$client = $client;
+    }
+
+    /**
+     * @param $url
+     * @param $data
+     * @param $gzip
+     * @param $action
+     * @return bool|false|string
+     */
     private static function httpPost($url, $data, $gzip, $action)
     {
-        if(!isset(HttpManager::$curls[$url])){
-            $curl = curl_init($url);
-            HttpManager::$curls[$url] = $curl;
+        static $default = null;
+        if($default === null) {
+            $default = [
+                'headers' => [
+                    'User-Agent'=> 'getui client',
+                    'Content-Type' => 'text/html;charset=UTF-8',
+                    'Connection' => 'Keep-Alive',
+                ],
+                'timeout' => 30,
+                'curl' => [
+                    CURLOPT_RETURNTRANSFER => 1,
+                    CURLOPT_FORBID_REUSE => 0,
+                    CURLOPT_FRESH_CONNECT => 0,
+                    CURLOPT_CONNECTTIMEOUT_MS => GTConfig::getHttpConnectionTimeOut(),
+                    CURLOPT_PROXY => GTConfig::getHttpProxyIp(),
+                    CURLOPT_PROXYPORT => GTConfig::getHttpProxyPort(),
+                    CURLOPT_PROXYUSERNAME => GTConfig::getHttpProxyUserName(),
+                    CURLOPT_PROXYPASSWORD => GTConfig::getHttpProxyPasswd(),
+                    CURLOPT_FOLLOWLOCATION => 1,
+                    CURLOPT_MAXREDIRS => 7
+                ],
+            ];
         }
-
-        $curl = HttpManager::$curls[$url];
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($curl, CURLOPT_BINARYTRANSFER, 1);
-        curl_setopt($curl, CURLOPT_USERAGENT, 'GeTui PHP/1.0');
-        curl_setopt($curl, CURLOPT_POST, 1);
-        curl_setopt($curl, CURLOPT_FORBID_REUSE, 0);
-        curl_setopt($curl, CURLOPT_FRESH_CONNECT, 0);
-        curl_setopt($curl, CURLOPT_CONNECTTIMEOUT_MS, GTConfig::getHttpConnectionTimeOut());
-        curl_setopt($curl, CURLOPT_TIMEOUT_MS, GTConfig::getHttpSoTimeOut());
-        $header = array("Content-Type:text/html;charset=UTF-8", "Connection: Keep-Alive");
-        if ($gzip) {
-            $data = gzencode($data, 9);
-            $header[] = 'Accept-Encoding:gzip';
-            $header[] = 'Content-Encoding:gzip';
-            curl_setopt($curl, CURLOPT_ENCODING, "gzip");
+        $options = $default;
+        if($gzip) {
+            $options['headers']['Content-Encoding'] = 'gzip';
+            $options['body'] = gzencode($data);
+        } else {
+            $options['body'] = $data;
         }
-        if(!is_null($action))
-        {
-            $header[] = "Gt-Action:" . $action;
+        if($action !== null) {
+            $options['headers']['Gt-Action'] = $action;
         }
-        curl_setopt($curl, CURLOPT_HTTPHEADER,$header);
-        curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
-
-        $curl_version = curl_version();
-        if ($curl_version['version_number'] >= 462850) {
-            curl_setopt($curl, CURLOPT_CONNECTTIMEOUT_MS, 30000);
-            curl_setopt($curl, CURLOPT_NOSIGNAL, 1);
+        try {
+            $resp = self::getClient()->post($url, $options);
+            str($resp);
+            if ($resp && $resp->getStatusCode() === 200) {
+                return (string) $resp->getBody();
+            }
+        } catch (Throwable $e) {
         }
-       // 通过代理访问接口需要在此处配置代理
-        curl_setopt ($curl, CURLOPT_PROXY, GTConfig::getHttpProxyIp());
-        curl_setopt($curl,CURLOPT_PROXYPORT,GTConfig::getHttpProxyPort());
-        curl_setopt($curl, CURLOPT_PROXYUSERNAME, GTConfig::getHttpProxyUserName());
-        curl_setopt($curl, CURLOPT_PROXYPASSWORD, GTConfig::getHttpProxyPasswd());
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1); // return don't print
-        curl_setopt($curl, CURLOPT_TIMEOUT, 30); //设置超时时间
-        curl_setopt($curl, CURLOPT_USERAGENT, 'Mozilla/4.0 (compatible; MSIE 5.01; Windows NT 5.0)');
-        curl_setopt($curl, CURLOPT_FOLLOWLOCATION, 1); // 302 redirect
-        curl_setopt($curl, CURLOPT_MAXREDIRS, 7); //HTTp定向级别
-        //请求失败有3次重试机会
-        return  HttpManager::exeBySetTimes(3, $curl);
+        return false;
     }
 	
 	public static function httpHead($url)
     {
-        $curl = curl_init($url);
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($curl, CURLOPT_BINARYTRANSFER, 1);
-        curl_setopt($curl, CURLOPT_USERAGENT, 'GeTui PHP/1.0');
-		curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'HEAD');
-        curl_setopt($curl, CURLOPT_CONNECTTIMEOUT_MS, GTConfig::getHttpConnectionTimeOut());
-        curl_setopt($curl, CURLOPT_TIMEOUT_MS, GTConfig::getHttpSoTimeOut());
-        curl_setopt($curl, CURLOPT_NOBODY, 1);
-        $header = array("Content-Type:text/html;charset=UTF-8");
-        curl_setopt($curl, CURLOPT_HTTPHEADER,$header);
-
-        $curl_version = curl_version();
-        if ($curl_version['version_number'] >= 462850) {
-            curl_setopt($curl, CURLOPT_CONNECTTIMEOUT_MS, 30000);
-            curl_setopt($curl, CURLOPT_NOSIGNAL, 1);
+        static $options = null;
+        if ($options === null) {
+            $options = [
+                'headers' => [
+                    'User-Agent' => 'getui client',
+                    'Content-Type' => 'text/html;charset=UTF-8',
+                ],
+                'timeout' => 30,
+                'curl' => [
+                    CURLOPT_RETURNTRANSFER => 1,
+                    CURLOPT_PROXY => GTConfig::getHttpProxyIp(),
+                    CURLOPT_PROXYPORT => GTConfig::getHttpProxyPort(),
+                    CURLOPT_PROXYPASSWORD => GTConfig::getHttpProxyPasswd(),
+                    CURLOPT_FOLLOWLOCATION => 1,
+                    CURLOPT_MAXREDIRS => 7
+                ]
+            ];
         }
-
-        //通过代理访问接口需要在此处配置代理
-        curl_setopt ($curl, CURLOPT_PROXY, GTConfig::getHttpProxyIp());
-        curl_setopt($curl,CURLOPT_PROXYPORT,GTConfig::getHttpProxyPort());
-        curl_setopt($curl, CURLOPT_PROXYUSERNAME, GTConfig::getHttpProxyUserName());
-        curl_setopt($curl, CURLOPT_PROXYPASSWORD, GTConfig::getHttpProxyPasswd());
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1); // return don't print
-        curl_setopt($curl, CURLOPT_TIMEOUT, 30); //设置超时时间
-        curl_setopt($curl, CURLOPT_USERAGENT, 'Mozilla/4.0 (compatible; MSIE 5.01; Windows NT 5.0)');
-        curl_setopt($curl, CURLOPT_FOLLOWLOCATION, 1); // 302 redirect
-        curl_setopt($curl, CURLOPT_MAXREDIRS, 7); //HTTp定向级别
-        //curl_setopt($curl, CURLOPT_PROXY, '192.168.1.18:808');
-        //请求失败有3次重试机会
-		$result = HttpManager::exeBySetTimes(3, $curl);
-		
-        curl_close($curl);
-        return $result;
+        try {
+            $resp = self::getClient()->request('HEAD',$url,$options);
+            if ($resp && $resp->getStatusCode() === 200) {
+                return (string)$resp->getBody();
+            }
+        } catch (Throwable $e) {
+        }
+        return false;
     }
 
+    /**
+     * @param $url
+     * @param $params
+     * @param $gzip
+     * @return array | false
+     * @throws JsonException
+     */
     public static function httpPostJson($url, $params, $gzip)
     {
-        if(!isset($params["version"]))
-        {
+        if(!isset($params["version"])) {
             $params["version"] = GTConfig::getSDKVersion();
         }
         $action = $params["action"];
-        $data = json_encode($params);
-        $result = null;
-        try {
-            $resp = HttpManager::httpPost($url, $data, $gzip, $action);
-            //LogUtils::debug("发送请求 post:{$data} return:{$resp}");
-            $result = json_decode($resp, true);
-            return $result;
-        } catch (Throwable $e) {
-            throw new RequestException($params["requestId"],"httpPost:[".$url."] [" .$data." ] [ ".$result."]:",$e);
-        }
-    }
-
-    private static function exeBySetTimes($count, $curl)
-    {
-        $result = curl_exec($curl);
-		$info = curl_getinfo($curl);
-		$code = $info["http_code"];
-		
-        if ($code !== 200 && curl_errno($curl) !== 0) {
-            LogUtils::debug("request errno: ". curl_errno($curl).",url:".$info["url"]);
-			$count--;
-            if ($count > 0) {
-                $result = HttpManager::exeBySetTimes($count, $curl);
-            }
-        }
-        return $result;
+        $resp = self::httpPost($url, Json::encode($params), $gzip, $action);
+        return $resp ? Json::decode($resp) : false;
     }
 }

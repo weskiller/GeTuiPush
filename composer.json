@@ -19,6 +19,7 @@
         "ext-json": "*",
         "ext-curl": "*",
         "ext-zlib": "*",
-        "ext-mbstring": "*"
+        "ext-mbstring": "*",
+        "guzzlehttp/guzzle": "^7.0"
     }
 }
