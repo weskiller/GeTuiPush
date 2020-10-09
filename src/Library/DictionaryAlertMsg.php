@@ -16,7 +16,7 @@ class DictionaryAlertMsg implements ApnMsgInterface
     public $launchImage;
     public $subtitle;
     public $subtitleLocKey;
-    public $subtitleLocArgs;
+    public $subtitleLocArgs = array();
 
     public function get_alertMsg() {
 

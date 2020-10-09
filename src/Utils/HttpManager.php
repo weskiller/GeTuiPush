@@ -70,7 +70,7 @@ class HttpManager
      * @param $data
      * @param $gzip
      * @param $action
-     * @return bool|false|string
+     * @return null|string
      */
     private static function httpPost($url, $data, $gzip, $action)
     {
@@ -115,7 +115,7 @@ class HttpManager
             }
         } catch (Throwable $e) {
         }
-        return false;
+        return null;
     }
 	
 	public static function httpHead($url)
@@ -145,7 +145,7 @@ class HttpManager
             }
         } catch (Throwable $e) {
         }
-        return false;
+        return null;
     }
 
     /**
@@ -162,6 +162,6 @@ class HttpManager
         }
         $action = $params["action"];
         $resp = self::httpPost($url, Json::encode($params), $gzip, $action);
-        return $resp ? Json::decode($resp) : false;
+        return $resp ? Json::decode($resp) : null;
     }
 }
