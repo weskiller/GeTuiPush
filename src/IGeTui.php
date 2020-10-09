@@ -98,38 +98,43 @@ Class IGeTui
         }
         return $urlList;
     }
-    function httpPostJSON($url,$data,$gzip=false)
+
+    function httpPostJSON($url,$data,$gzip = false)
     {
+        static $isNeedSignAction = [];
         $data['version'] = GTConfig::getSDKVersion();
         $data['authToken'] = $this->authToken;
-        if($url === null){
+        if ($url === null) {
             $url = $this->host;
         }
-        $rep = HttpManager::httpPostJson($url, $data, $gzip);
-        if($rep !== null)
-        {
-            if ( 'sign_error' === $rep['result']) {
-                try
-                {
-                    if ($this->connect())
-                    {
-                        $data['authToken'] = $this->authToken;
-                        $rep = HttpManager::httpPostJson($url, $data, $gzip);
+        if (($isNeedSignAction[$data['action']] ?? false) === false) {
+            $rep = HttpManager::httpPostJson($url, $data, $gzip);
+            if($rep === null) {
+                return null;
+            }
+            if ('sign_error' === $rep['result']) {
+                $isNeedSignAction[$data['action']] ??= true;
+                return $this->httpPostJSONWithSign($url,$data,$gzip);
+            }
 
-                    }
-                }
-                catch (Throwable $e)
-                {
-                    throw new RuntimeException("连接异常".$e);
-                }
-            }
-            else if('domain_error' === $rep['result'])
-            {
+            if ('domain_error' === $rep['result']) {
                 $this->initOSDomain($rep["osList"] ?? null);
-                $rep = HttpManager::httpPostJson($url, $data, $gzip);
+                return HttpManager::httpPostJson($url, $data, $gzip);
             }
+            return $rep;
         }
-        return $rep;
+        return $this->httpPostJSONWithSign($url,$data,$gzip);
+    }
+
+    public function httpPostJSONWithSign($url,$data,$gzip = false)
+    {
+        try {
+            $this->connect();
+            $data['authToken'] = $this->authToken;
+            return HttpManager::httpPostJson($url, $data, $gzip);
+        } catch (Throwable $e) {
+            throw new RuntimeException("连接异常".$e);
+        }
     }
 
     public  function connect()

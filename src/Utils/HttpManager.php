@@ -79,7 +79,7 @@ class HttpManager
             $default = [
                 'headers' => [
                     'User-Agent'=> 'getui client',
-                    'Content-Type' => 'text/html;charset=UTF-8',
+                    'Content-Type' => 'application/json;charset=utf-8',
                     'Connection' => 'Keep-Alive',
                 ],
                 'timeout' => 30,
@@ -125,7 +125,7 @@ class HttpManager
             $options = [
                 'headers' => [
                     'User-Agent' => 'getui client',
-                    'Content-Type' => 'text/html;charset=UTF-8',
+                    'Content-Type' => 'text/html;charset=utf-8',
                 ],
                 'timeout' => 30,
                 'curl' => [
